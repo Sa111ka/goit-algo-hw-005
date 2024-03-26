@@ -1,16 +1,28 @@
+def handler(func):
+    def wrapper(*args, **kwargs):
+        try:
+            return func(*args, **kwargs)
+        except KeyError:
+            return "KeyError"
+        except ValueError:
+            return "ValueError"
+        except IndexError:
+            return "IndexError"
+    return wrapper
 
+@handler
 def parse_input(user_input):
     cmd, *args = user_input.split()
     cmd = cmd.strip().lower()
     return cmd, *args
 
-
+@handler
 def add_contact(args, contacts):
     name, phone = args
     contacts[name] = phone
     return "Contact added."
 
-
+@handler
 def change_contact(args, contacts):
     name, phone = args
     if name in contacts:
@@ -18,7 +30,7 @@ def change_contact(args, contacts):
     contacts[name] = phone
     return "Contact updated successfully"
 
-
+@handler
 def show_contact(args, contacts):
     name, _ = args
     return contacts[name]
@@ -45,24 +57,8 @@ def main():
             print(show_contact(args, contacts))
         else:
             print("Invalid command.")
-def handler(func):
-    def wrapper(*args, **kwargs):
-        try:
-            return func(*args, **kwargs)
-        except KeyError:
-            return "KeyError"
-        except ValueError:
-            return "ValueError"
-        except IndexError:
-            return "IndexError"
-    return wrapper
 
-@handler
-def add(arg, contacts):
-    raise KeyError
 
-def main():
-    print(add([], {}))
 
 if __name__ == "__main__":
     main()
